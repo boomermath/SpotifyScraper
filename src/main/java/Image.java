@@ -8,4 +8,16 @@ public class Image {
         this.width = width;
         this.url = url;
     }
+
+    public int height() {
+        return height;
+    }
+
+    public int width() {
+        return width;
+    }
+
+    public String url() {
+        return url;
+    }
 }
