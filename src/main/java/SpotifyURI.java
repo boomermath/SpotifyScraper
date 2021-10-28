@@ -1,6 +1,6 @@
 public class SpotifyURI {
 
-    private String[] URI;
+    private final String[] URI;
 
     public SpotifyURI(String url) {
         URI = url.split(":");
@@ -11,22 +11,10 @@ public class SpotifyURI {
     }
 
     public String toURI() {
-        StringBuilder uri = new StringBuilder();
-        uri.append(URI[0]);
-        uri.append(":");
-        uri.append(URI[1]);
-        uri.append(":");
-        uri.append(URI[2]);
-        
-        return uri.toString();
+        return URI[0] + ":" + URI[1] + ":" + URI[2];
     }
 
     public String toURL() {
-        StringBuilder url = new StringBuilder("https://open.spotify.com/");
-        url.append(URI[1]);
-        url.append("/");
-        url.append(URI[2]);
-
-        return url.toString();
+        return "https://open.spotify.com/" + URI[1] + "/" + URI[2];
     }
 }

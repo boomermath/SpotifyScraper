@@ -1,6 +1,6 @@
 public class SpotifyArtist {
-    private String name;
-    private SpotifyURI uri;
+    private final String name;
+    private final SpotifyURI uri;
 
     public SpotifyArtist(String name, SpotifyURI uri) {
         this.name = name; 
