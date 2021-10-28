@@ -1,25 +1,5 @@
-public class SpotifyArtist {
-    private final String name;
-    private final SpotifyURI uri;
-
-    public SpotifyArtist(String name, SpotifyURI uri) {
-        this.name = name; 
-        this.uri = uri;
-    }
-
-    public String id() {
-        return uri.id();
-    }
-
-    public String name() {
-        return name;
-    }
-
-    public String uri() {
-        return uri.toURI();
-    }
-
-    public String url() {
-        return uri.toURL();
+public class SpotifyArtist extends SpotifyComponent {
+    public SpotifyArtist(String name, String type, SpotifyURI uri) {
+        super(name, type, uri);
     }
 }

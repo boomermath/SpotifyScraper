@@ -1,30 +1,30 @@
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 import java.time.LocalDate;
+import java.time.Instant;
 
-public class SpotifyTrack {
-        private final String name;
-        private final String type;
-        private final SpotifyURI uri;
+public class SpotifyTrack extends SpotifyComponent {
         private final SpotifyArtist artist;
         private final Image[] thumbnails;
         private final boolean explicit;
         private final long durationMS;
         private final String audioPreviewURL;
         private final String releaseDate;
+        private final String addedAt;
+        private final SpotifyArtist addedBy;
 
-        public SpotifyTrack(String name, String type, SpotifyURI uri, SpotifyArtist artist, Image[] thumbnails, boolean explicit, long durationMS, String audioPreviewURL, String releaseDate) {
-                this.name = name;
-                this.type = type;
-                this.uri = uri;
+        public SpotifyTrack(String name, String type, SpotifyURI uri, SpotifyArtist artist, Image[] thumbnails, boolean explicit, long durationMS, String audioPreviewURL, String releaseDate, String addedAt, SpotifyArtist addedBy) {
+                super(name, type, uri);
                 this.artist = artist;
                 this.thumbnails = thumbnails;
                 this.explicit = explicit;
                 this.durationMS = durationMS;
                 this.audioPreviewURL = audioPreviewURL;
                 this.releaseDate = releaseDate;
+                this.addedAt = addedAt;
+                this.addedBy = artist;
         }
-        
+
         public String id() {
                 return uri.id();
         }
@@ -75,5 +75,13 @@ public class SpotifyTrack {
 
         public LocalDate releaseDate() {
                 return LocalDate.parse(releaseDate);
+        }
+
+        public Instant addedAt() {
+                return addedAt == null ? null : Instant.parse(addedAt); 
+        }
+
+        public SpotifyArtist addedBy() {
+                return addedBy;
         }
 }
