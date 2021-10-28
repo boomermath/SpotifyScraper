@@ -1,7 +1,13 @@
 public class SpotifyComponent {
-    private final String name;
-    private final String type; 
-    private final String uri;
+    protected final String name;
+    protected final String type;
+    protected final SpotifyURI uri;
+
+    public SpotifyComponent(String name, String type, SpotifyURI uri) {
+        this.name = name;
+        this.type = type;
+        this.uri = uri;
+    }
 
     public String id() {
         return uri.id();
@@ -13,7 +19,7 @@ public class SpotifyComponent {
 
     public String type() {
         return type;
-    }  
+    }
 
     public String uri() {
         return uri.toURI();

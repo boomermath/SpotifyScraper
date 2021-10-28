@@ -40,13 +40,13 @@ public class Parser {
 
         SpotifyURI uri = new SpotifyURI(json.getString("uri"));
         SpotifyArtist artist = new SpotifyArtist(artistInfo.getString("name"), artistInfo.getString("type"), new SpotifyURI(artistInfo.getString("uri")));
-        SpotifyArtist user = new SpotifyArtist()
+        SpotifyArtist user = new SpotifyArtist();
 
         JSONArray jsonImages = albumInfo.getJSONArray("images");
-        Image[] images = new Image[JSONimages.length()];
+        Image[] images = new Image[jsonImages.length()];
 
-        for (int i = 0; i < JSONimages.length(); i++) {
-            JSONObject jsonImage = JSONimages.getJSONObject(i);
+        for (int i = 0; i < jsonImages.length(); i++) {
+            JSONObject jsonImage = jsonImages.getJSONObject(i);
             images[i] = new Image(jsonImage.getInt("height"), jsonImage.getInt("width"), jsonImage.getString("url"));
         }
 
@@ -60,7 +60,7 @@ public class Parser {
                 json.getString("preview_url"),
                 albumInfo.getString("release_date"),
                 json.optString("added_at"),
-                
+                null
         );
     }
 }
