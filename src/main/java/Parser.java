@@ -21,15 +21,15 @@ public class Parser {
         return null;
     }
 
-    public static String UrltoUri(String url) {
-        try {
-            URL spotifyUrl = new URL(url);
-            String[] path = spotifyUrl.getPath().split("/");
-            return "spotify:" + path[1] + ":" + path[2];
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+    private static Image[] parseThumbnails(JSONArray jsonImages) {
+        Image[] images = new Image[jsonImages.length()];
+
+        for (int i = 0; i < jsonImages.length(); i++) {
+            JSONObject jsonImage = jsonImages.getJSONObject(i);
+            images[i] = new Image(jsonImage.getInt("height"), jsonImage.getInt("width"), jsonImage.getString("url"));
         }
-        return null;
+
+        return images;
     }
 
     public static SpotifyTrack parseTrack(String url) {
@@ -38,29 +38,45 @@ public class Parser {
         JSONObject albumInfo = json.getJSONObject("album");
         JSONObject artistInfo = json.getJSONArray("artists").getJSONObject(0);
 
-        SpotifyURI uri = new SpotifyURI(json.getString("uri"));
-        SpotifyArtist artist = new SpotifyArtist(artistInfo.getString("name"), artistInfo.getString("type"), new SpotifyURI(artistInfo.getString("uri")));
-        SpotifyArtist user = new SpotifyArtist();
+        SpotifyArtist artist = new SpotifyArtist(artistInfo.getString("name"), artistInfo.getString("type"), new SpotifyURI(artistInfo.getString("uri")));        
 
-        JSONArray jsonImages = albumInfo.getJSONArray("images");
-        Image[] images = new Image[jsonImages.length()];
-
-        for (int i = 0; i < jsonImages.length(); i++) {
-            JSONObject jsonImage = jsonImages.getJSONObject(i);
-            images[i] = new Image(jsonImage.getInt("height"), jsonImage.getInt("width"), jsonImage.getString("url"));
-        }
-
-
-        
         return new SpotifyTrack(
                 json.getString("name"),
-                json.getString("type"), uri, artist, images,
+                json.getString("type"), 
+                new SpotifyURI(json.getString("uri"), artist, 
+                parseThumbnails(albumInfo.getJSONArray("images")),
+                json.getInt("popularity"),
                 json.getBoolean("explicit"),
                 json.getLong("duration_ms"),
                 json.getString("preview_url"),
                 albumInfo.getString("release_date"),
                 json.optString("added_at"),
-                null
+                json.optJSONObject("added_by") ? new SpotifyURI(json.getJSONObject("added_by").getString("uri")) : null
+        );
+    }
+
+    public static SpotifyPlaylist parsePlaylist(String url) {
+        JSONObject json = parseResource(url);
+        JSONObject artistInfo = json.getJSONObject("owner");
+
+        SpotifyArtist owner = new SpotifyArtist(artistInfo.getString("display_name"), artistInfo.getString("type"), new SpotifyURI(artistInfo.getString("uri")));
+
+        JSONArray jsonTracks = json.getJSONObject("tracks").getJSONArray("items");
+        SpotifyTrack[] tracks = new SpotifyTrack[jsonTracks.length()];
+
+        for (int i = 0; i < jsonTracks.length(); i++) {
+            JSONObject track = jsonTracks.getJSONObject(i);
+            tracks[i] = parseTrack(track);
+        }
+
+        return new SpotifyPlaylist(
+            json.getString("name"),
+            json.getString("type"),
+            json.getString("description"), tracks,
+            new SpotifyURI(json.getString("uri")),
+            json.getJSONObject("followers").getInt("total"),
+            parseThumbnails(json.getJSONArray("images")),
+            owner
         );
     }
 }

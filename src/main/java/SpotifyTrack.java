@@ -6,23 +6,25 @@ import java.time.Instant;
 public class SpotifyTrack extends SpotifyComponent {
     private final SpotifyArtist artist;
     private final Image[] thumbnails;
+    private final int popularity;
     private final boolean explicit;
     private final long durationMS;
     private final String audioPreviewURL;
     private final String releaseDate;
     private final String addedAt;
-    private final SpotifyArtist addedBy;
+    private final SpotifyURI addedBy;
 
-    public SpotifyTrack(String name, String type, SpotifyURI uri, SpotifyArtist artist, Image[] thumbnails, boolean explicit, long durationMS, String audioPreviewURL, String releaseDate, String addedAt, SpotifyArtist addedBy) {
+    public SpotifyTrack(String name, String type, SpotifyURI uri, SpotifyArtist artist, Image[] thumbnails, int popularity, boolean explicit, long durationMS, String audioPreviewURL, String releaseDate, String addedAt, SpotifyURI addedBy) {
         super(name, type, uri);
         this.artist = artist;
         this.thumbnails = thumbnails;
+        this.popularity = popularity;
         this.explicit = explicit;
         this.durationMS = durationMS;
         this.audioPreviewURL = audioPreviewURL;
         this.releaseDate = releaseDate;
         this.addedAt = addedAt;
-        this.addedBy = artist;
+        this.addedBy = addedBy;
     }
 
     public String id() {
@@ -53,6 +55,10 @@ public class SpotifyTrack extends SpotifyComponent {
         return thumbnails;
     }
 
+    public int popularity() {
+        return popularity;
+    }
+
     public boolean explicit() {
         return explicit;
     }
@@ -81,7 +87,7 @@ public class SpotifyTrack extends SpotifyComponent {
         return addedAt == null ? null : Instant.parse(addedAt);
     }
 
-    public SpotifyArtist addedBy() {
+    public SpotifyURI addedBy() {
         return addedBy;
     }
 }
