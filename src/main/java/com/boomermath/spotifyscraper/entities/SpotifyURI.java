@@ -1,3 +1,5 @@
+package com.boomermath.spotifyscraper.entities;
+
 public class SpotifyURI {
 
     private final String[] URI;

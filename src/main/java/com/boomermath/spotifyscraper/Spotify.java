@@ -1,3 +1,5 @@
+package com.boomermath.spotifyscraper;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -9,13 +11,14 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-public class Parser {
-    public static JSONObject parseResource(String url) {
+public class Spotify {
+    private static JSONObject parseResource(String inputUrl) {
         try {
-            Element script = Jsoup.connect(url).get().select("script#resource").get(0);
+            URL url = new URL(inputUrl);
+            Element script = Jsoup.connect("https://open.spotify.com/embed" + url.getPath()).get().select("script#resource").get(0);
             String parsedJSON = URLDecoder.decode(script.data(), StandardCharsets.UTF_8);
             return new JSONObject(parsedJSON);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -32,9 +35,8 @@ public class Parser {
         return images;
     }
 
-    public static SpotifyTrack parseTrack(String url) {
+    public static SpotifyTrack getTrack(String url) {
         JSONObject json = parseResource(url);
-        assert json != null;
         JSONObject albumInfo = json.getJSONObject("album");
         JSONObject artistInfo = json.getJSONArray("artists").getJSONObject(0);
 
@@ -55,7 +57,7 @@ public class Parser {
         );
     }
 
-    public static SpotifyPlaylist parsePlaylist(String url) {
+    public static SpotifyPlaylist getPlaylist(String url) {
         JSONObject json = parseResource(url);
         JSONObject artistInfo = json.getJSONObject("owner");
 

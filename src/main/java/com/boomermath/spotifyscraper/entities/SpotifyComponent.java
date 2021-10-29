@@ -1,3 +1,5 @@
+package com.boomermath.spotifyscraper.entities;
+
 public class SpotifyComponent {
     protected final String name;
     protected final String type;

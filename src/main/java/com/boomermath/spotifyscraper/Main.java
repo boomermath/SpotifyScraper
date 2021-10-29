@@ -1,3 +1,5 @@
+package com.boomermath.spotifyscraper;
+
 public class Main {
     public static void main(String[] args) {
         SpotifyTrack spotifyTrack = Parser.parseTrack("https://open.spotify.com/embed/track/69WpV0U7OMNFGyq8I63dcC");

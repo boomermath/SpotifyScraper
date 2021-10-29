@@ -1,3 +1,5 @@
+package com.boomermath.spotifyscraper.entities;
+
 public class Image {
     private int height;
     private int width;

@@ -1,3 +1,5 @@
+package com.boomermath.spotifyscraper.entities;
+
 public class SpotifyPlaylist extends SpotifyComponent {
     private final String description;
     private final SpotifyTrack[] tracks;
