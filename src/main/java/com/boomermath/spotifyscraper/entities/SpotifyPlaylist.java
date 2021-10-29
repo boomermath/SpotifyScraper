@@ -10,6 +10,7 @@ public class SpotifyPlaylist extends SpotifyComponent {
     public SpotifyPlaylist(String name, String type, String description, SpotifyTrack[] tracks, SpotifyURI uri, int followers, Image[] thumbnails, SpotifyArtist owner) {
         super(name, type, uri);
         this.description = description;
+        this.tracks = tracks;
         this.followers = followers;
         this.thumbnails = thumbnails;
         this.owner = owner;
