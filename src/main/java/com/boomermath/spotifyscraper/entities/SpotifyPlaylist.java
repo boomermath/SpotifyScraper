@@ -16,23 +16,23 @@ public class SpotifyPlaylist extends SpotifyComponent {
         this.owner = owner;
     }
 
-    public static String description() {
+    public String description() {
         return description;
     }
 
-    public static SpotifyTrack[] tracks() {
+    public SpotifyTrack[] tracks() {
         return tracks;
     }
 
-    public static int followers() {
+    public int followers() {
         return followers;
     }
 
-    public static Image[] thumbnails() {
+    public Image[] thumbnails() {
         return thumbnails;
     }
 
-    public static SpotifyArtist owner() {
+    public SpotifyArtist owner() {
         return owner;
     }
 }

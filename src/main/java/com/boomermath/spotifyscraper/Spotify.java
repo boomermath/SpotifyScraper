@@ -1,5 +1,6 @@
 package com.boomermath.spotifyscraper;
 
+import com.boomermath.spotifyscraper.entities.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -10,15 +11,31 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class Spotify {
+
+    private static String getURL(String inputUrl) throws MalformedURLException {
+        URL url = new URL(inputUrl);
+
+        if (!url.getHost().equals("open.spotify.com")) {
+            throw new MalformedURLException("URL is not a valid spotify url!");
+        }
+
+        String path = url.getPath();
+
+        return path.startsWith("/embed") ? path : "https://open.spotify.com/embed" + path;
+    }
+
     private static JSONObject parseResource(String inputUrl) {
         try {
-            URL url = new URL(inputUrl);
-            Element script = Jsoup.connect("https://open.spotify.com/embed" + url.getPath()).get().select("script#resource").get(0);
+            String url = getURL(inputUrl);
+            Element script = Jsoup.connect(url).get().select("script#resource").get(0);
             String parsedJSON = URLDecoder.decode(script.data(), StandardCharsets.UTF_8);
             return new JSONObject(parsedJSON);
-        } catch (Exception e) {
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("Input is not a valid spotify url!");
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -35,31 +52,36 @@ public class Spotify {
         return images;
     }
 
-    public static SpotifyTrack getTrack(String url) {
-        JSONObject json = parseResource(url);
+    private static SpotifyTrack parseTrack(JSONObject json) {
+        json = json.has("track") ? json.getJSONObject("track") : json; //if its from a playlist
+        System.out.println(json);
         JSONObject albumInfo = json.getJSONObject("album");
         JSONObject artistInfo = json.getJSONArray("artists").getJSONObject(0);
 
-        SpotifyArtist artist = new SpotifyArtist(artistInfo.getString("name"), artistInfo.getString("type"), new SpotifyURI(artistInfo.getString("uri")));        
+        SpotifyArtist artist = new SpotifyArtist(artistInfo.getString("name"), artistInfo.getString("type"), new SpotifyURI(artistInfo.getString("uri")));
 
         return new SpotifyTrack(
                 json.getString("name"),
-                json.getString("type"), 
-                new SpotifyURI(json.getString("uri"), artist, 
+                json.getString("type"),
+                new SpotifyURI(json.getString("uri")), artist,
                 parseThumbnails(albumInfo.getJSONArray("images")),
                 json.getInt("popularity"),
                 json.getBoolean("explicit"),
                 json.getLong("duration_ms"),
                 json.getString("preview_url"),
                 albumInfo.getString("release_date"),
-                json.optString("added_at"),
-                json.optJSONObject("added_by") ? new SpotifyURI(json.getJSONObject("added_by").getString("uri")) : null
+                json.optString("added_at", null),
+                json.has("added_by") ? new SpotifyURI(json.getJSONObject("added_by").getString("uri")) : null
         );
+    }
+
+    public static SpotifyTrack getTrack(String url) {
+        return parseTrack(parseResource(url));
     }
 
     public static SpotifyPlaylist getPlaylist(String url) {
         JSONObject json = parseResource(url);
-        JSONObject artistInfo = json.getJSONObject("owner");
+        JSONObject artistInfo = Objects.requireNonNull(json).getJSONObject("owner");
 
         SpotifyArtist owner = new SpotifyArtist(artistInfo.getString("display_name"), artistInfo.getString("type"), new SpotifyURI(artistInfo.getString("uri")));
 
@@ -72,13 +94,13 @@ public class Spotify {
         }
 
         return new SpotifyPlaylist(
-            json.getString("name"),
-            json.getString("type"),
-            json.getString("description"), tracks,
-            new SpotifyURI(json.getString("uri")),
-            json.getJSONObject("followers").getInt("total"),
-            parseThumbnails(json.getJSONArray("images")),
-            owner
+                json.getString("name"),
+                json.getString("type"),
+                json.getString("description"), tracks,
+                new SpotifyURI(json.getString("uri")),
+                json.getJSONObject("followers").getInt("total"),
+                parseThumbnails(json.getJSONArray("images")),
+                owner
         );
     }
 }

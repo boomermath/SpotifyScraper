@@ -1,6 +1,6 @@
 package com.boomermath.spotifyscraper.entities;
 
-public class SpotifyComponent {
+class SpotifyComponent {
     protected final String name;
     protected final String type;
     protected final SpotifyURI uri;

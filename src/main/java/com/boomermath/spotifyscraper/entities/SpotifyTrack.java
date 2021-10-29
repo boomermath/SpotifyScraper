@@ -1,9 +1,9 @@
 package com.boomermath.spotifyscraper.entities;
 
 import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-import java.time.LocalDate;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.TimeZone;
 
 public class SpotifyTrack extends SpotifyComponent {
     private final SpotifyArtist artist;
@@ -27,26 +27,6 @@ public class SpotifyTrack extends SpotifyComponent {
         this.releaseDate = releaseDate;
         this.addedAt = addedAt;
         this.addedBy = addedBy;
-    }
-
-    public String id() {
-        return uri.id();
-    }
-
-    public String name() {
-        return name;
-    }
-
-    public String type() {
-        return type;
-    }
-
-    public String uri() {
-        return uri.toURI();
-    }
-
-    public String url() {
-        return uri.toURL();
     }
 
     public SpotifyArtist artist() {
@@ -86,7 +66,7 @@ public class SpotifyTrack extends SpotifyComponent {
     }
 
     public Instant addedAt() {
-        return addedAt == null ? null : Instant.parse(addedAt);
+        return addedAt != null ? Instant.parse(addedAt) : null;
     }
 
     public SpotifyURI addedBy() {
