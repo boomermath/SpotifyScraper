@@ -54,7 +54,7 @@ public class Spotify {
 
     private static SpotifyTrack parseTrack(JSONObject json) {
         json = json.has("track") ? json.getJSONObject("track") : json; //if its from a playlist
-        System.out.println(json);
+
         JSONObject albumInfo = json.getJSONObject("album");
         JSONObject artistInfo = json.getJSONArray("artists").getJSONObject(0);
 
