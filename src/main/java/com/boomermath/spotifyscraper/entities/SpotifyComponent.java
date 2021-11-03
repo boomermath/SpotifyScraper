@@ -30,4 +30,8 @@ class SpotifyComponent {
     public String url() {
         return uri.toURL();
     }
+
+    public String apiUrl() {
+        return uri.toAPIURL();
+    }
 }
