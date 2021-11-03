@@ -103,8 +103,7 @@ public class Spotify {
         SpotifyTrack[] tracks = new SpotifyTrack[jsonTracks.length()];
 
         for (int i = 0; i < jsonTracks.length(); i++) {
-            JSONObject track = jsonTracks.getJSONObject(i);
-            tracks[i] = parseTrack(track);
+            tracks[i] = parseTrack(jsonTracks.getJSONObject(i));
         }
 
         return new SpotifyPlaylist(
