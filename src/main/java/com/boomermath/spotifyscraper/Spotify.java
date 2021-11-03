@@ -52,14 +52,20 @@ public class Spotify {
         return images;
     }
 
-    private static SpotifyArtist parseArtist(JSONObject raw) {
-        JSONObject artistInfo = raw.getJSONArray("artists").getJSONObject(0);
+    private static SpotifyArtist[] parseArtists(JSONArray artistsJSON) {
+        SpotifyArtist[] artists = new SpotifyArtist[artistsJSON.length()];
 
-        return new SpotifyArtist(
-                artistInfo.getString("name"),
-                artistInfo.getString("type"),
-                new SpotifyURI(artistInfo.getString("uri"))
-        );
+        for (int i = 0; i < artistsJSON.length(); i++) {
+            JSONObject artistInfo = artistsJSON.getJSONObject(i);
+
+            artists[i] = new SpotifyArtist(
+                    artistInfo.getString("name"),
+                    artistInfo.getString("type"),
+                    new SpotifyURI(artistInfo.getString("uri"))
+            );
+        }
+
+        return artists;
     }
 
     private static SpotifyTrack parseTrack(JSONObject json) {
@@ -70,14 +76,14 @@ public class Spotify {
                 albumInfo.getString("name"),
                 albumInfo.getString("album_type"),
                 new SpotifyURI(albumInfo.getString("uri")),
-                parseArtist(albumInfo)
+                parseArtists(albumInfo.getJSONArray("artists"))
         );
 
         return new SpotifyTrack(
                 json.getString("name"),
                 json.getString("type"),
                 new SpotifyURI(json.getString("uri")), album,
-                parseArtist(json),
+                parseArtists(json.getJSONArray("artists")),
                 parseThumbnails(albumInfo.getJSONArray("images")),
                 json.getInt("popularity"),
                 json.getBoolean("explicit"),

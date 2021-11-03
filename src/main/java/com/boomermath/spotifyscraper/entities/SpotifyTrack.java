@@ -7,7 +7,7 @@ import java.util.TimeZone;
 
 public class SpotifyTrack extends SpotifyComponent {
     private final SpotifyAlbum album;
-    private final SpotifyArtist artist;
+    private final SpotifyArtist[] artists;
     private final Image[] thumbnails;
     private final int popularity;
     private final boolean explicit;
@@ -17,10 +17,10 @@ public class SpotifyTrack extends SpotifyComponent {
     private final String addedAt;
     private final SpotifyURI addedBy;
 
-    public SpotifyTrack(String name, String type, SpotifyURI uri, SpotifyAlbum album, SpotifyArtist artist, Image[] thumbnails, int popularity, boolean explicit, long durationMS, String audioPreviewURL, String releaseDate, String addedAt, SpotifyURI addedBy) {
+    public SpotifyTrack(String name, String type, SpotifyURI uri, SpotifyAlbum album, SpotifyArtist[] artists, Image[] thumbnails, int popularity, boolean explicit, long durationMS, String audioPreviewURL, String releaseDate, String addedAt, SpotifyURI addedBy) {
         super(name, type, uri);
         this.album = album;
-        this.artist = artist;
+        this.artists = artists;
         this.thumbnails = thumbnails;
         this.popularity = popularity;
         this.explicit = explicit;
@@ -35,8 +35,8 @@ public class SpotifyTrack extends SpotifyComponent {
         return album;
     }
 
-    public SpotifyArtist artist() {
-        return artist;
+    public SpotifyArtist[] artists() {
+        return artists;
     }
 
     public Image[] thumbnails() {
