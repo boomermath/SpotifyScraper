@@ -24,7 +24,7 @@ public class Spotify {
 
         String path = url.getPath();
 
-        return path.startsWith("/embed") ? path : "https://open.spotify.com/embed" + path;
+        return path.startsWith("/embed") ? inputUrl : "https://open.spotify.com/embed" + path;
     }
 
     private static JSONObject parseResource(String inputUrl) {
