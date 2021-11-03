@@ -19,4 +19,8 @@ public class SpotifyURI {
     public String toURL() {
         return "https://open.spotify.com/" + URI[1] + "/" + URI[2];
     }
+
+    public String toAPIURL() {
+        return "https://api.spotify.com/v1/" + URI[1] + "s/" + URI[2];
+    }
 }
