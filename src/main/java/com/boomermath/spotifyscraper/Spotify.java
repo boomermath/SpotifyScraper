@@ -52,18 +52,32 @@ public class Spotify {
         return images;
     }
 
+    private static SpotifyArtist parseArtist(JSONObject raw) {
+        JSONObject artistInfo = raw.getJSONArray("artists").getJSONObject(0);
+
+        return new SpotifyArtist(
+                artistInfo.getString("name"),
+                artistInfo.getString("type"),
+                new SpotifyURI(artistInfo.getString("uri"))
+        );
+    }
+
     private static SpotifyTrack parseTrack(JSONObject json) {
         json = json.has("track") ? json.getJSONObject("track") : json; //if its from a playlist
 
         JSONObject albumInfo = json.getJSONObject("album");
-        JSONObject artistInfo = json.getJSONArray("artists").getJSONObject(0);
-
-        SpotifyArtist artist = new SpotifyArtist(artistInfo.getString("name"), artistInfo.getString("type"), new SpotifyURI(artistInfo.getString("uri")));
+        SpotifyAlbum album = new SpotifyAlbum(
+                albumInfo.getString("name"),
+                albumInfo.getString("album_type"),
+                new SpotifyURI(albumInfo.getString("uri")),
+                parseArtist(albumInfo)
+        );
 
         return new SpotifyTrack(
                 json.getString("name"),
                 json.getString("type"),
-                new SpotifyURI(json.getString("uri")), artist,
+                new SpotifyURI(json.getString("uri")), album,
+                parseArtist(json),
                 parseThumbnails(albumInfo.getJSONArray("images")),
                 json.getInt("popularity"),
                 json.getBoolean("explicit"),

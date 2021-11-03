@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.TimeZone;
 
 public class SpotifyTrack extends SpotifyComponent {
+    private final SpotifyAlbum album;
     private final SpotifyArtist artist;
     private final Image[] thumbnails;
     private final int popularity;
@@ -16,8 +17,9 @@ public class SpotifyTrack extends SpotifyComponent {
     private final String addedAt;
     private final SpotifyURI addedBy;
 
-    public SpotifyTrack(String name, String type, SpotifyURI uri, SpotifyArtist artist, Image[] thumbnails, int popularity, boolean explicit, long durationMS, String audioPreviewURL, String releaseDate, String addedAt, SpotifyURI addedBy) {
+    public SpotifyTrack(String name, String type, SpotifyURI uri, SpotifyAlbum album, SpotifyArtist artist, Image[] thumbnails, int popularity, boolean explicit, long durationMS, String audioPreviewURL, String releaseDate, String addedAt, SpotifyURI addedBy) {
         super(name, type, uri);
+        this.album = album;
         this.artist = artist;
         this.thumbnails = thumbnails;
         this.popularity = popularity;
@@ -27,6 +29,10 @@ public class SpotifyTrack extends SpotifyComponent {
         this.releaseDate = releaseDate;
         this.addedAt = addedAt;
         this.addedBy = addedBy;
+    }
+
+    public SpotifyAlbum album() {
+        return album;
     }
 
     public SpotifyArtist artist() {
