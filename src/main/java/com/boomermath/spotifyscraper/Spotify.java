@@ -16,7 +16,12 @@ import java.util.Objects;
 public class Spotify {
 
     private static String getURL(String inputUrl) throws MalformedURLException {
-        URL url = new URL(inputUrl);
+        URL url;
+        try {
+            url = new URL(inputUrl);
+        } catch (MalformedURLException e) {
+            url = new URL(new SpotifyURI(inputUrl).toURL());
+        }
 
         if (!url.getHost().equals("open.spotify.com")) {
             throw new MalformedURLException("URL is not a valid spotify url!");

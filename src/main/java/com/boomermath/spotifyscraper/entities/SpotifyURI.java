@@ -1,11 +1,17 @@
 package com.boomermath.spotifyscraper.entities;
 
+import java.util.Objects;
+
 public class SpotifyURI {
 
     private final String[] URI;
 
     public SpotifyURI(String url) {
         URI = url.split(":");
+
+        if (!Objects.equals(URI[0], "spotify") || URI.length != 3) {
+            throw new IllegalArgumentException("Invalid Spotify URI");
+        }
     }
 
     public String id() {
